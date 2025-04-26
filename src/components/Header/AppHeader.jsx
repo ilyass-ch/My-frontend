@@ -6,22 +6,37 @@ import {
   SettingOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-
-const userMenu = (
-  <Menu>
-    <Menu.Item key="profile" icon={<ProfileOutlined />} onClick={() => console.log("Profil utilisateur")}>
-      Profil
-    </Menu.Item>
-    <Menu.Item key="settings" icon={<SettingOutlined />} onClick={() => console.log("Paramètres utilisateur")}>
-      Paramètres
-    </Menu.Item>
-    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => console.log("Déconnexion utilisateur")}>
-      Déconnexion
-    </Menu.Item>
-  </Menu>
-);
+import { useNavigate } from "react-router-dom";
 
 const AppHeader = () => {
+  const navigate = useNavigate();
+
+  const userMenu = (
+    <Menu>
+      <Menu.Item
+        key="profile"
+        icon={<ProfileOutlined />}
+        onClick={() => navigate("/profile")}
+      >
+        Profil
+      </Menu.Item>
+      <Menu.Item
+        key="settings"
+        icon={<SettingOutlined />}
+        onClick={() => console.log("Paramètres utilisateur")}
+      >
+        Paramètres
+      </Menu.Item>
+      <Menu.Item
+        key="logout"
+        icon={<LogoutOutlined />}
+        onClick={() => console.log("Déconnexion utilisateur")}
+      >
+        Déconnexion
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <header
       style={{
