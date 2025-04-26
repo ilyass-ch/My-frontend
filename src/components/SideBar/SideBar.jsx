@@ -4,6 +4,7 @@ import AppHeader from "../Header/AppHeader";
 import AppSider from "./AppSider";
 import { Outlet } from "react-router-dom"; // ✅ Importer Outlet
 import 'antd/dist/reset.css';
+import "./SideBar.css"; // ✅ Importer le fichier CSS
 
 const { Content } = Layout;
 
@@ -28,10 +29,20 @@ const SideBar = () => {
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
               boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+              overflow: "auto",
+              maxHeight: "calc(100vh - 112px)",
+
+              /* SCROLLBAR STYLE */
+              scrollbarWidth: 'thin', /* Firefox */
+              scrollbarColor: 'rgba(83, 61, 224, 0.2) transparent', /* Firefox */
+
+              /* Webkit (Chrome, Edge, Safari) */
+              msOverflowStyle: 'none', /* IE and Edge */
             }}
           >
-            <Outlet /> {/* ✅ Zone d’affichage dynamique */}
+            <Outlet />
           </Content>
+
         </Layout>
       </Layout>
     </Layout>

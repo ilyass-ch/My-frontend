@@ -1,0 +1,62 @@
+/* Profile Container */
+.profile-container {
+    max-width: 1200px; /* Adjust the max-width of the profile container */
+    margin: 0 auto; /* Center the profile */
+    padding: 2rem; /* Padding around the content */
+    background-color: #e0e9f7;
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  }
+  
+  /* Title */
+  .profile-title {
+    font-size: 1.5rem; /* Size for the profile title */
+    font-weight: 600;
+    color: #4a4a4a;
+    margin-bottom: 1rem; /* Space between title and profile content */
+  }
+  
+  /* Profile Content */
+  .profile-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.5rem; /* Space between avatar and user info */
+    padding: 1.5rem;
+    border-radius: 12px; /* Rounded corners */
+    background-color: rgb(218, 221, 232);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for the profile content */
+  }
+  
+  /* Avatar Styling */
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border: 3px solid #3b82f6; /* Border color */
+    box-shadow: 0px 4px 10px rgba(59, 130, 246, 0.4); /* Subtle shadow */
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  
+  .profile-avatar:hover {
+    transform: scale(1.05); /* Avatar grows slightly on hover */
+    box-shadow: 0px 8px 24px rgba(59, 130, 246, 0.6); /* More prominent shadow on hover */
+  }
+  
+  /* User Info */
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .user-username {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .user-email {
+    font-size: 1rem;
+    color: #555;
+  }
+  

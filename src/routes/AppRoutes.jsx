@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/LoginPage';
 import Register from '../pages/RegisterPage';
-import ProfilePage from '../features/profile/ProfilePage';
+// import ProfilePage from '../features/profile/ProfilePage';
+import ProfileIndex from '../features/profile/index';
+import TestProfileView from '../features/profile/TestProfileView';  
 import NotFound from '../pages/NotFound';
 
 const AppRoutes = () => {
@@ -12,7 +14,9 @@ const AppRoutes = () => {
       <Routes>
         {/* Page principale */}
         <Route path="/" element={<Home />} >
-          <Route path="profile" element={<ProfilePage />} />
+          {/* <Route path="profile" element={<ProfilePage />} /> */}
+          <Route path="profile" element={<ProfileIndex />} />
+          <Route path="test-profile" element={<TestProfileView />} />
           {/* Tu peux ajouter ici d'autres routes imbriquées */}
         </Route>
 
