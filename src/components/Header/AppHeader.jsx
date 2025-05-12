@@ -1,5 +1,6 @@
 import React from "react";
 import { Dropdown, Space, Avatar, Menu } from "antd";
+import { logout } from "../../features/auth/login/LoginSlice";
 import {
   UserOutlined,
   ProfileOutlined,
@@ -7,9 +8,21 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const AppHeader = () => {
+    const dispatch = useDispatch();
   const navigate = useNavigate();
+
+
+    const handleLogout = () => {
+    // Supprimer les données de l'utilisateur du localStorage
+    localStorage.clear();
+    // Réinitialiser l'état dans Redux
+    dispatch(logout());
+    // Rediriger l'utilisateur vers la page de connexion
+    navigate("/login");
+  };
 
   const userMenu = (
     <Menu>
@@ -18,7 +31,7 @@ const AppHeader = () => {
         icon={<ProfileOutlined />}
         onClick={() => navigate("/profile")}
       >
-        Profil
+        Profile
       </Menu.Item>
       <Menu.Item
         key="settings"
@@ -30,7 +43,9 @@ const AppHeader = () => {
       <Menu.Item
         key="logout"
         icon={<LogoutOutlined />}
-        onClick={() => console.log("Déconnexion utilisateur")}
+        onClick={() =>{
+        handleLogout();
+      }}
       >
         Déconnexion
       </Menu.Item>

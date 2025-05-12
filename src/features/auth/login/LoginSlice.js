@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import login from './LoginAPI';  // Assurez-vous que la fonction `login` est correctement définie
+import login from './LoginAPI'; // Vérifie que login est bien une fonction asynchrone qui retourne un objet avec user, access-token, refresh-token
 
+// État initial
 const initialState = {
   user: JSON.parse(localStorage.getItem('user')) || null,
   accessToken: localStorage.getItem('accessToken') || null,
@@ -8,18 +9,19 @@ const initialState = {
   loading: false,
   error: null,
 };
-console.log("authSlice.js loaded");
 
 // Thunk pour la connexion
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials, { rejectWithValue }) => {
     try {
-      const data = await login(credentials);  // Appel à l'API pour se connecter
-      console.log(data);  // Inspecter la structure des données reçues
-      if (!data['access-token'] || !data['refresh-token']) {
-        throw new Error('Token manquant dans la réponse de l\'API');
+      const data = await login(credentials);
+
+      if (!data['access-token'] || !data['refresh-token'] || !data.user) {
+        return rejectWithValue('Réponse API invalide : token ou user manquant');
       }
+
+      // Stockage des tokens et de l'utilisateur dans localStorage
       localStorage.setItem('accessToken', data['access-token']);
       localStorage.setItem('refreshToken', data['refresh-token']);
       localStorage.setItem('user', JSON.stringify(data.user));
@@ -30,20 +32,24 @@ export const loginUser = createAsyncThunk(
         refreshToken: data['refresh-token'],
       };
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Une erreur est survenue');
+      return rejectWithValue(
+        err.response?.data?.message || err.message || 'Une erreur est survenue'
+      );
     }
   }
 );
 
-const LoginSlice = createSlice({
+// Slice
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout(state) {
-      // Réinitialiser l'état et supprimer les éléments du localStorage
+    logout: (state) => {
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
+      state.loading = false;
+      state.error = null;
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
@@ -57,7 +63,6 @@ const LoginSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        // Mise à jour de l'état avec les données de l'action
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
@@ -69,5 +74,6 @@ const LoginSlice = createSlice({
   },
 });
 
-export const { logout } = LoginSlice.actions;
-export default LoginSlice.reducer;
+// Export des actions et du reducer
+export const { logout } = authSlice.actions;
+export default authSlice.reducer;

@@ -1,0 +1,48 @@
+.product-page {
+    padding: 20px;
+  }
+  
+  .product-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .product-form input,
+  .product-form textarea {
+    margin-bottom: 10px;
+    padding: 8px;
+  }
+  
+  .product-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  
+  .product-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fafafa;
+  }
+  
+  .product-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .product-actions button {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  

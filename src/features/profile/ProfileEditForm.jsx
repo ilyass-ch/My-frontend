@@ -1,8 +1,10 @@
 import React from 'react';
 import { Avatar, Button } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import SubmitButton from '../../components/buttons/SubmitButton';
+import Spinner from '../../components/Loader/Spinner';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -17,14 +19,21 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const ProfileEditForm = ({ formData, preview, handleChange, handleSubmit, loading }) => {
+  // Retrieve user data from the Redux store
+  const user = useSelector((state) => state.auth.user);
+
+  // Ensure the user exists and handle photo logic
+  const userPhoto = preview || (user?.photo ? `data:image/jpeg;base64,${user.photo}` : 'https://via.placeholder.com/150');
+
   return (
     <div className="flex-1 p-6 bg-gray-50 rounded-lg shadow-md">
       <h3 className="text-2xl font-semibold mb-4 text-gray-800">Modifier Mes Infos</h3>
 
+      {/* Avatar Section */}
       <div className="flex flex-col items-center mb-6">
         <Avatar
           alt="Photo de profil"
-          src={preview || 'https://via.placeholder.com/150'}
+          src={userPhoto}
           sx={{
             width: 120,
             height: 120,
@@ -34,9 +43,10 @@ const ProfileEditForm = ({ formData, preview, handleChange, handleSubmit, loadin
             '&:hover': {
               transform: 'scale(1.05)',
               boxShadow: '0px 8px 24px rgba(59,130,246,0.4)',
-            }
+            },
           }}
         />
+
         <Button
           component="label"
           variant="contained"
@@ -70,32 +80,29 @@ const ProfileEditForm = ({ formData, preview, handleChange, handleSubmit, loadin
         </Button>
       </div>
 
+      {/* Form Section */}
       <form onSubmit={handleSubmit} className="space-y-5">
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          placeholder="Nom d'utilisateur"
-          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-        />
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email"
-          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-        />
-        <input
-          type="text"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          placeholder="Téléphone"
-          className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-        />
-        <SubmitButton label="Mettre à jour" loading={loading} />
+        {['username', 'email', 'phone'].map((field) => (
+          <div className="w-full" key={field}>
+            <input
+              type={field === 'email' ? 'email' : 'text'}
+              name={field}
+              value={formData[field]}
+              onChange={handleChange}
+              placeholder={field === 'email' ? 'Email' : field === 'phone' ? 'Téléphone' : "Nom d'utilisateur"}
+              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+              required
+            />
+          </div>
+        ))}
+
+        {/* Submit Button */}
+        <div className="mt-6">
+          <SubmitButton
+            label="Mettre à jour"
+            loading={loading ? <Spinner size={24} /> : null}
+          />
+        </div>
       </form>
     </div>
   );

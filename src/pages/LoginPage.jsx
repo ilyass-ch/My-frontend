@@ -1,19 +1,29 @@
-import React, { useState } from "react";
+import React, { useState,useEffect  } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/auth/login/LoginSlice";
-import { Navigate,Link } from "react-router-dom";
+import { Navigate, Link, useNavigate  } from "react-router-dom";
+import { Spin } from "antd";
+
 
 import Image from "../assets/image.webp";
 import Logo from "../assets/logo.png";
 import GoogleSvg from "../assets/icons8-google.svg";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import "../features/auth/login/LoginStyle.css";
-// import { color } from "chart.js/helpers";
 
 const LoginPage = () => {
+  
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth || {});
-const { token, loading, error } = auth;
+  console.log(auth);
+  const { accessToken, loading, error } = useSelector((state) => {
+    console.log("access token ",state.auth);
+    return state.auth || { accessToken: null, loading: false, error: null };
+  });
+
+  const navigate = useNavigate();
+
+
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +35,11 @@ const { token, loading, error } = auth;
     dispatch(loginUser({ username, password }));
   };
 
-  if (token) return <Navigate to="/" />;
+  useEffect(() => {
+    if (accessToken) {
+      navigate("/", { state: { showLoginSuccess: true } });
+    }
+  }, [accessToken, navigate]);
 
   return (
     <div className="login-main">
@@ -49,8 +63,8 @@ const { token, loading, error } = auth;
 
             <form onSubmit={handleLogin}>
               <input
-                type="username"
-                placeholder="Username"
+                type="text"
+                placeholder="Nom d'utilisateur"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
@@ -83,7 +97,7 @@ const { token, loading, error } = auth;
 
               <div className="login-center-buttons">
                 <button type="submit" disabled={loading}>
-                  {loading ? "Connexion..." : "Se connecter"}
+                  {loading ? <Spin size="small" /> : "Se connecter"}
                 </button>
                 <button type="button" className="google-btn">
                   <img src={GoogleSvg} alt="Google" />

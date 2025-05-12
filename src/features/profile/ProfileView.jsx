@@ -5,6 +5,8 @@ import ModeTwoToneIcon from '@mui/icons-material/ModeTwoTone';
 import { useNavigate } from 'react-router-dom'; // To handle redirection
 import './Profile.css'; // Import your CSS file for styling
 
+
+
 // Helper function to get role colors
 const getRoleColor = (role) => {
   switch (role) {
@@ -23,11 +25,13 @@ const ProfileView = ({ user }) => {
   const navigate = useNavigate(); // Hook to handle redirection
 
   if (!user) return null; // If no user, return nothing
+  console.log("user", user);
+  
 
   // Handle submit and redirect to the edit profile page
   const handleSubmit = () => {
     // You can perform any logic here before redirecting
-    navigate('/Profile'); // Redirect to the edit profile page
+    navigate('/edit-profile'); // Redirect to the edit profile page
   };
 
   return (
@@ -35,12 +39,17 @@ const ProfileView = ({ user }) => {
 
       {/* Avatar and username */}
       <div style={{ flex: 3 }}>
-        <h3 className="profile-title">Informations Profile</h3>
+        <h3 style={{
+                    fontFamily: 'Poppins, sans-serif',
+                    fontSize: '20px',
+                    textDecoration: 'underline'
+                    }} 
+                    className="profile-title">Informations Profile</h3>
         <div>
           <Avatar
             alt="Photo de profil"
-            src={user.photo || 'https://via.placeholder.com/150'}
-            sx={{
+             src={user.photo ? `data:image/jpeg;base64,${user.photo}` : 'https://via.placeholder.com/150'}
+              sx={{
               width: 120,
               height: 120,
               border: '3px solid #3b82f6',
@@ -53,10 +62,16 @@ const ProfileView = ({ user }) => {
             }}
           />
           <div className="user-info">
-            <Typography variant="h5" className="font-semibold text-gray-900">
+            <Typography  style={{
+                                  fontSize: '20px',
+                                  fontFamily: 'Poppins, sans-serif',
+                                  fontWeight: 600,
+                                  color: '#1f2937', // équivalent Tailwind text-gray-900
+                                  letterSpacing: '0.5px',
+                                }} variant="h5" className="font-semibold text-gray-900">
               {user.username}
             </Typography>
-            <Typography variant="body2" className="text-gray-600">
+            <Typography style={{fontSize:12, fontFamily: 'Poppins, sans-serif'}} variant="body2" className="text-gray-600">
               {user.email}
             </Typography>
           </div>
@@ -90,16 +105,21 @@ const ProfileView = ({ user }) => {
               Rôles
             </Typography>
             <div className="flex flex-wrap gap-4">
-              {user.roles.map((role, index) => (
-                <Tag
-                  key={index}
-                  color={getRoleColor(role)}
-                  className="text-base font-medium px-4 py-2 rounded-full shadow-md"
-                >
-                  {role}
-                </Tag>
-              ))}
+              {Array.isArray(user.roles) && user.roles.length > 0 ? (
+                user.roles.map((role, index) => (
+                  <Tag
+                    key={index}
+                    color={getRoleColor(role)}
+                    className="text-base font-medium px-4 py-2 rounded-full shadow-md"
+                  >
+                    {role}
+                  </Tag>
+                ))
+              ) : (
+                <p>Aucun rôle attribué.</p> // Optionnel, affiche un message si les rôles sont vides
+              )}
             </div>
+
           </div>
         </div>
       </div>
